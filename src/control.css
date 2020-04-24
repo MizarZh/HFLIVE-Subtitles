@@ -1,0 +1,57 @@
+body {
+    width: 100vw;
+    margin: 0;
+}
+
+.control {
+    display: flex;
+    position: fixed;
+    right: 0;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 2px;
+}
+#file {
+    display: block;
+}
+
+.toggle {
+    width: 50%;
+    height: 50px;
+    border-radius: 5px;
+    background-color: turquoise;
+    margin: 5px 0;
+}
+
+.toggle + p{
+    color: red;
+}
+
+.outer {
+    display: flex;
+    justify-content: left;
+}
+
+.content {
+    border: 1px solid black; 
+    width: 70vw;
+    margin: 10px;
+    overflow-x: hidden;
+}
+
+pre {
+    margin: 0;
+    font-size: 20px;
+    
+}
+pre:hover {
+    background-color: #fff9a4;
+    transition: ease 500ms;
+    cursor: pointer;
+}
+
+.active {
+    background-color: yellow;
+}

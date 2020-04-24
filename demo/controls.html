@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contorls</title>
+    <style>
+body {
+    width: 100vw;
+    margin: 0;
+}
+
+.control {
+    display: flex;
+    position: fixed;
+    right: 0;
+    top: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 2px;
+}
+#file {
+    display: block;
+}
+
+.toggle {
+    width: 50%;
+    height: 50px;
+    border-radius: 5px;
+    background-color: turquoise;
+    margin: 5px 0;
+}
+
+.toggle + p{
+    color: red;
+}
+
+.outer {
+    display: flex;
+    justify-content: left;
+}
+
+.content {
+    border: 1px solid black; 
+    width: 70vw;
+    margin: 10px;
+    overflow-x: hidden;
+}
+
+pre {
+    margin: 0;
+    font-size: 20px;
+    
+}
+pre:hover {
+    background-color: #fff9a4;
+    transition: ease 500ms;
+    cursor: pointer;
+}
+
+.active {
+    background-color: yellow;
+}
+    </style>
+</head>
+<body>
+    <div class="outer">
+        <div class="content">
+            
+        </div>
+    </div>
+    <div class="control">
+        <input type="file" id="file" accept=".lrc">
+        <button class="toggle">放出</button>
+        <p class='status'>状态：未放出</p>
+        
+    </div>
+    <script>
+var $toggle = document.querySelector('.toggle');
+var $file = document.querySelector('#file');
+var $time = document.querySelector('.time');
+var $content = document.querySelector('.content');
+var $status = document.querySelector('.status');
+var fileReader = new FileReader();
+
+var checked;
+var put = false; //正在放出
+
+$toggle.addEventListener('click',function(e){
+    if(checked !== null){
+        if(put === false){
+            localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+            $status.innerText = '状态：放出';
+            $toggle.innerText = '停止';
+            put = true;
+        }else{
+            $status.innerText = '状态：未放出';
+            localStorage.removeItem('linenow');
+            $toggle.innerText = '放出';
+            put = false;
+        }
+    }
+})
+
+$file.addEventListener('change',function(e){
+    localStorage.removeItem('linenow')
+    $content.innerHTML = '';
+    fileReader.readAsText(this.files[0]);
+    console.log($file.files[0]);
+    setTimeout(function(){parseLrc(fileReader.result)},200);
+    checked = null;
+})
+
+function parseSrt(text){
+    // 00:00:00.000 --> 00:00:00.000
+    var parseTime = /\d{2}:\d{2}:\d{2}[,\.]\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}[,\.]\d{3}/g
+    var arr = text.split('\n');
+    for(let i = 0;i < arr.length; ++i){
+        if(arr[i].match(parseTime)){
+            load(arr[i] + '    ' + arr[i+1]);
+        }
+    }
+}
+
+function parseLrc(text){
+    // [00:00.00]
+    var parseTime = /\[\d{2}:\d{2}.\d{2}\]/g
+    var arr = text.split('\n');
+    for(let i = 0;i < arr.length; ++i){
+        var time = arr[i].match(parseTime);
+        if(time){
+            load(time + '     ' + arr[i].slice(10),i);
+        }
+    }
+}
+
+function load(content, count){
+    var l = document.createElement('pre');
+    l.innerText = content;
+    $content.appendChild(l);
+}
+
+window.addEventListener('mouseup',function(e){
+    if($content.contains(e.target)){
+        if(checked === null){
+            checked = e.target;
+            checked.classList.add('active');
+            if(put === true) localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+        }else if(checked !== e.target){
+            checked.classList.remove('active')
+            checked = e.target;
+            checked.classList.add('active');
+            if(put === true) localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+        }
+    }
+});
+</script>
+
+</body>
+</html>
