@@ -28,8 +28,18 @@ $file.addEventListener('change',function(e){
     localStorage.removeItem('linenow')
     $content.innerHTML = '';
     fileReader.readAsText(this.files[0]);
-    console.log($file.files[0]);
-    setTimeout(function(){parseLrc(fileReader.result)},200);
+    switch($file.files[0].name.slice(-4)){
+        case '.lrc':
+            setTimeout(function(){parseLrc(fileReader.result)},200);
+            break;
+        case '.srt':
+            setTimeout(function(){parseSrt(fileReader.result)},200);
+            break;
+        default:
+            alert('文件类型错误');
+            //throw new Error('文件类型错误')
+    }
+    
     checked = null;
 })
 

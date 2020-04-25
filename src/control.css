@@ -1,6 +1,7 @@
 body {
     width: 100vw;
     margin: 0;
+    padding: 0;
 }
 
 .control {
@@ -32,6 +33,7 @@ body {
 .outer {
     display: flex;
     justify-content: left;
+    width: 100vw;
 }
 
 .content {
@@ -54,4 +56,12 @@ pre:hover {
 
 .active {
     background-color: yellow;
+}
+
+iframe {
+    height: 20vh;
+    width: 20vw;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
