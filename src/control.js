@@ -5,18 +5,33 @@ var $content = document.querySelector('.content');
 var $status = document.querySelector('.status');
 var fileReader = new FileReader();
 
+var $fontSize = document.querySelector('.fontSize');
+var $marginBottom = document.querySelector('.marginBottom');
+var fontSize, marginButton;
 var checked;
 var put = false; //正在放出
+
+function setProperties(){
+    fontSize = parseFloat($fontSize.value) ? parseFloat($fontSize.value) + 'px' : '16px';
+    marginBottom = parseFloat($marginBottom.value) ? parseFloat($marginBottom.value) + 'px' : '16px';
+    localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+    localStorage.setItem('fontSize',fontSize);
+    localStorage.setItem('marginBottom',marginBottom);
+    localStorage.setItem('updated',false);
+    localStorage.setItem('updatediniframe',false);
+}
 
 $toggle.addEventListener('click',function(e){
     if(checked !== null){
         if(put === false){
-            localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+            setProperties();
             $status.innerText = '状态：放出';
             $toggle.innerText = '停止';
             put = true;
         }else{
             $status.innerText = '状态：未放出';
+            localStorage.setItem('updated',false);
+            localStorage.setItem('updatediniframe',false);
             localStorage.removeItem('linenow');
             $toggle.innerText = '放出';
             put = false;
@@ -72,21 +87,25 @@ function load(content, count){
     $content.appendChild(l);
 }
 
-window.addEventListener('mouseup',function(e){
+window.addEventListener('mousedown',function(e){
     if($content.contains(e.target)){
         if(checked === null){
             checked = e.target;
             checked.classList.add('active');
-            if(put === true) localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+            if(put === true) setProperties();
         }else if(checked !== e.target){
-            checked.classList.remove('active')
+            checked.classList.remove('active'); // 旧元素移除active状态
             checked = e.target;
             checked.classList.add('active');
-            if(put === true) localStorage.setItem('linenow',checked.innerText.slice(10).trim());
+            if(put === true) setProperties();
         }
     }
 })
 
 window.addEventListener('unload',function(){
     localStorage.removeItem('linenow');
+    localStorage.removeItem('fontSize');
+    localStorage.removeItem('marginBottom');
+    localStorage.removeItem('updated');
+    localStorage.removeItem('updatediniframe');
 })
