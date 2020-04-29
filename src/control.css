@@ -2,7 +2,14 @@ body {
     width: 100vw;
     margin: 0;
     padding: 0;
+    background-image: radial-gradient( circle farthest-corner at -0.6% 44.4%,  rgba(142,252,152,1) 0%, rgba(107,214,250,1) 90% );
+    /* background-image: radial-gradient( circle 997px at 99.9% 96.8%,  rgba(132,255,199,1) 0%, rgba(137,248,255,1) 90% ); */
 }
+
+p {
+    margin: 5px;
+}
+
 
 .control {
     display: flex;
@@ -15,19 +22,29 @@ body {
     margin: 2px;
 }
 #file {
-    display: block;
+    display: none;
 }
 
-.toggle {
+.toggle, .file {
     width: 50%;
     height: 50px;
     border-radius: 5px;
     background-color: turquoise;
     margin: 5px 0;
+    border: 1px solid turquoise;
+    box-shadow: 1px 1px 3px #555;
 }
 
-.toggle + p{
+.toggle + p {
     color: red;
+}
+
+input[type=text] {
+    background-color: rgba(107,214,250,1);
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.2rem;
 }
 
 .outer {
@@ -46,7 +63,7 @@ body {
 pre {
     margin: 0;
     font-size: 20px;
-    
+    font-family: serif;
 }
 pre:hover {
     background-color: #fff9a4;
@@ -64,4 +81,5 @@ iframe {
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    margin: 10px;
 }

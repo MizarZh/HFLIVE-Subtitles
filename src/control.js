@@ -1,5 +1,7 @@
 var $toggle = document.querySelector('.toggle');
 var $file = document.querySelector('#file');
+var $filebutton = document.querySelector('.file');
+var $filename = document.querySelector('.filename');
 var $time = document.querySelector('.time');
 var $content = document.querySelector('.content');
 var $status = document.querySelector('.status');
@@ -39,10 +41,24 @@ $toggle.addEventListener('click',function(e){
     }
 })
 
+$filebutton.addEventListener('click',function(){
+    $file.click();
+})
+
 $file.addEventListener('change',function(e){
     localStorage.removeItem('linenow')
     $content.innerHTML = '';
     fileReader.readAsText(this.files[0]);
+
+    $filename.innerHTML = this.files[0].name;
+    // $toggle关闭
+    $status.innerText = '状态：未放出';
+    localStorage.setItem('updated',false);
+    localStorage.setItem('updatediniframe',false);
+    localStorage.removeItem('linenow');
+    $toggle.innerText = '放出';
+    put = false;
+
     switch($file.files[0].name.slice(-4)){
         case '.lrc':
             setTimeout(function(){parseLrc(fileReader.result)},200);
@@ -64,7 +80,7 @@ function parseSrt(text){
     var arr = text.split('\n');
     for(let i = 0;i < arr.length; ++i){
         if(arr[i].match(parseTime)){
-            load(arr[i] + '    ' + arr[i+1]);
+            load(arr[i] + '  ' + arr[i+1]);
         }
     }
 }
@@ -76,7 +92,7 @@ function parseLrc(text){
     for(let i = 0;i < arr.length; ++i){
         var time = arr[i].match(parseTime);
         if(time){
-            load(time + '     ' + arr[i].slice(10),i);
+            load(time + '   ' + arr[i].slice(10),i);
         }
     }
 }
